@@ -1,4 +1,4 @@
-package com.appskeleton;
+package com.easymove;
 
 import com.reactnativenavigation.NavigationActivity;
 
