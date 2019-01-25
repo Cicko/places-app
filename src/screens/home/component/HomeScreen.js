@@ -13,6 +13,7 @@ import { noop, isEmpty } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import { StoreService } from '../../../lib/services';
 import List from '../../../app/components/List';
+import action from'../../../app/store/global/screen/action'
 import { buttonClick } from '../store/actions';
 import colors from '../../../app/theme/colors';
 import items from '../../categories';
@@ -36,24 +37,50 @@ class HomeScreen extends Component {
      */
     constructor(props) {
         super(props);
-        Navigation.events().bindComponent(this);
+        // Navigation.events().bindComponent(this);
     }
 
     static getTrigger(functionName) {
         return `App/Src/Screens/Home/Component/HomeScreen.${functionName}`;
     }
 
-    handleClick = (item) => {
-        console.log(item);
-        StoreService.dispatch(buttonClick(), HomeScreen.getTrigger('handleClick'));
-    };
+  handleListItemPress = (item) => {
+    if (!isEmpty(item.categories)) {
+        /*
+      if (this.showBanner()) {
+        AdMobInterstitial.requestAd().then(() => {
+          AdMobInterstitial.showAd();
+        });
+      }
+      */
+      StoreService.dispatch(action.changeScreen(item.category), 'HomeScreen.handleListItemPress');
+      /*
+      NavigationService.push(TheHomeScreen.id, {
+        title: item.name,
+        passProps: {
+          items: item.categories,
+          color: item.color,
+        },
+      });
+      */
+    } else {
+      StoreService.dispatch(action.changeScreen(item.category), 'HomeScreen.handleListItemPress');
+      /*
+      if (this.checkShowBanner()) {
+        this.showBanner();
+      } else {
+        openMap({query: item.category + ' near me'});
+      }
+      */
+    }
+  };
 
     render() {
         return (
           <ScrollView style={styles.container} bounces={false}>
             <List
               items={isEmpty(this.props.items) ? items : this.props.items}
-              onPress={this.handleClick}
+              onPress={this.handleListItemPress}
               color={this.props.color}
               onAddNew={noop}
             />
