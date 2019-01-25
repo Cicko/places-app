@@ -8,39 +8,19 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet } from 'react-native';
-import {
-    Container,
-    Content,
-    Button,
-    Text,
-} from 'native-base';
+import { StyleSheet, ScrollView } from 'react-native';
+import { noop, isEmpty } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import { StoreService } from '../../../lib/services';
+import List from '../../../app/components/List';
 import { buttonClick } from '../store/actions';
+import colors from '../../../app/theme/colors';
+import items from '../../categories';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    buttonContainer: {
-        justifyContent: 'center',
-        flexDirection: 'row',
-    },
-    button: {
-        width: '90%',
-        textAlign: 'center',
-        justifyContent: 'center',
-        margin: 10,
-    },
+  container: {
+    backgroundColor: colors.backgroundDefault,
+  },
 });
 
 
@@ -63,23 +43,21 @@ class HomeScreen extends Component {
         return `App/Src/Screens/Home/Component/HomeScreen.${functionName}`;
     }
 
-    handleClick = () => {
+    handleClick = (item) => {
+        console.log(item);
         StoreService.dispatch(buttonClick(), HomeScreen.getTrigger('handleClick'));
     };
 
     render() {
         return (
-            <Container>
-                <Content>
-                    <Text> Home Screen </Text>
-                    <Text> {this.props.text} </Text>
-                    <View style={styles.buttonContainer}>
-                        <Button style={styles.button} onPress={this.handleClick}>
-                            <Text> Show magic </Text>
-                        </Button>
-                    </View>
-                </Content>
-            </Container>
+          <ScrollView style={styles.container} bounces={false}>
+            <List
+              items={isEmpty(this.props.items) ? items : this.props.items}
+              onPress={this.handleClick}
+              color={this.props.color}
+              onAddNew={noop}
+            />
+          </ScrollView>
         );
     }
 }

@@ -12,11 +12,12 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
+    ImageBackground,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { upperFirst, get } from 'lodash';
-import LinearGradient from 'react-native-linear-gradient';
-import { CachedImage } from 'react-native-cached-image';
+// import LinearGradient from 'react-native-linear-gradient';
+// import { CachedImage } from 'react-native-cached-image';
 
 const marginItems = 7;
 
@@ -88,16 +89,11 @@ class ListItem extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <CachedImage
+                <ImageBackground
                     source={get(this.props.item, 'image', {uri: ''})}
                     style={styles.imageBackground}
                     borderRadius={7}
                 >
-                    <LinearGradient
-                        style={styles.gradient}
-                        locations={[0, 0.5, 0.9]}
-                        colors={['black', 'transparent', 'black']}
-                    >
                         <TouchableOpacity onPress={this.handlePress}>
                             <View style={styles.overImageContainer}>
                                 <View style={styles.titleContainer}>
@@ -109,8 +105,7 @@ class ListItem extends Component {
                                 </View>
                             </View>
                         </TouchableOpacity>
-                    </LinearGradient>
-                </CachedImage>
+                </ImageBackground>
             </View>
         );
     }
