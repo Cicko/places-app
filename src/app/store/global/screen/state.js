@@ -8,5 +8,5 @@
 
 export default {
     changedScreens: 1,
-    actualScreen: null,
+    actualScreen: {},
 }

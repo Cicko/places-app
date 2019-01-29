@@ -13,7 +13,7 @@ function screen(state = initialState, action = { type: 'none' }) {
         case CHANGE_SCREEN:
             return {
                 ...state,
-                actualScreen: action.screen,
+                actualScreen: action.payload.screen,
                 changedScreens: state.changedScreens + 1,
             };
         case RESET_CHANGE_SCREEN_COUNT:

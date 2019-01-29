@@ -9,14 +9,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, ScrollView } from 'react-native';
-import { noop, isEmpty } from 'lodash';
+import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { StoreService } from '../../../lib/services';
 import List from '../../../app/components/List';
 import action from'../../../app/store/global/screen/action'
-import { buttonClick } from '../store/actions';
+import screenState from'../../../app/store/global/screen/state';
 import colors from '../../../app/theme/colors';
 import items from '../../categories';
+import HomeInfo from '../';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,6 +32,14 @@ class HomeScreen extends Component {
 
     static propTypes = {
         text: PropTypes.string,
+        color: PropTypes.string,
+        actualScreen: PropTypes.object,
+    };
+
+    static defaultProps = {
+        items: [],
+        color: colors.backgroundDefault,
+        actualScreen: null,
     };
 
     /**
@@ -37,7 +48,7 @@ class HomeScreen extends Component {
      */
     constructor(props) {
         super(props);
-        // Navigation.events().bindComponent(this);
+        Navigation.events().bindComponent(this);
     }
 
     static getTrigger(functionName) {
@@ -53,18 +64,25 @@ class HomeScreen extends Component {
         });
       }
       */
-      StoreService.dispatch(action.changeScreen(item.category), 'HomeScreen.handleListItemPress');
-      /*
-      NavigationService.push(TheHomeScreen.id, {
-        title: item.name,
-        passProps: {
-          items: item.categories,
-          color: item.color,
+      StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
+      Navigation.push(HomeInfo.id, {
+        component: {
+          name: HomeInfo.id,
+          passProps: {
+            items: item.categories,
+            color: item.color,
+          },
+          options: {
+            topBar: {
+              title: {
+                text: item.name,
+              }
+            }
+          }
         },
       });
-      */
     } else {
-      StoreService.dispatch(action.changeScreen(item.category), 'HomeScreen.handleListItemPress');
+      StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
       /*
       if (this.checkShowBanner()) {
         this.showBanner();
@@ -76,10 +94,11 @@ class HomeScreen extends Component {
   };
 
     render() {
+        console.log(this.props.actualScreen);
         return (
           <ScrollView style={styles.container} bounces={false}>
             <List
-              items={isEmpty(this.props.items) ? items : this.props.items}
+              items={get(this.props, 'actualScreen.categories', items)}
               onPress={this.handleListItemPress}
               color={this.props.color}
               onAddNew={noop}
@@ -89,4 +108,9 @@ class HomeScreen extends Component {
     }
 }
 
-export default HomeScreen;
+export default compose(
+  connect(state => ({
+    actualScreen: get(state, 'screen.actualScreen', screenState.actualScreen),
+  })),
+  // withTranslations,
+)(HomeScreen);

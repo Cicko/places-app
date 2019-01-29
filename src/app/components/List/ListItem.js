@@ -96,7 +96,7 @@ class ListItem extends Component {
                 >
                   <LinearGradient
                     style={styles.gradient}
-                    locations={[0, 0.5, 0.9]}
+                    locations={[0, 0.8, 1]}
                     colors={['black', 'transparent', 'black']}
                   >
                         <TouchableOpacity onPress={this.handlePress}>

@@ -60,6 +60,12 @@ class StoreService {
         }
         return this.reduxStore.dispatch(trigger ? assign(action, { trigger }) : action);
     }
+
+    /**
+    * REturns the store
+    * @returns {null|*}
+    */
+    getStore = () => this.reduxStore;
 }
 
 export default new StoreService;

@@ -32,8 +32,8 @@ if (Platform.OS === 'android') {
 }
 
 function start() {
-    registerScreens();
     StoreService.createStore();
+    registerScreens();
     Navigation.events().registerAppLaunchedListener(async () => {
         Navigation.setDefaultOptions(defaultOptions);
 
