@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug",
+    "bundle-android": "react-native bundle --assets-dest ./android/app/src/main/res/ --entry-file ./index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --platform android --dev false",
     "ios": "react-native run-ios",
     "test": "jest"
   },
