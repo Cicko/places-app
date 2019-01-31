@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const NUM_SCREENS_BETWEEN_ADS = 3;
+const NUM_SCREENS_BETWEEN_ADS = 4;
 
 class HomeScreen extends Component {
 
@@ -61,7 +61,6 @@ class HomeScreen extends Component {
             itemToOpen: null,
         };
 
-        Navigation.events().bindComponent(this);
         AdMobInterstitial.setAdUnitID('ca-app-pub-0073961265435848/9332367917');
         AdMobInterstitial.addEventListener('adClosed', () => {
             if (this.state.itemToOpen) {
@@ -71,6 +70,21 @@ class HomeScreen extends Component {
                 })
             }
         });
+    }
+
+    componentWillMount() {
+        this.navigationEventListener = Navigation.events().bindComponent(this);
+    }
+
+    componentWillUnmount() {
+        // Not mandatory
+        if (this.navigationEventListener) {
+            this.navigationEventListener.remove();
+        }
+    }
+
+    navigationButtonPressed({ buttonId }) {
+        console.log(buttonId);
     }
 
     static getTrigger(functionName) {
