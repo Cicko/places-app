@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
 });
 
+const NUM_SCREENS_BETWEEN_ADS = 4;
 
 class HomeScreen extends Component {
 
@@ -60,7 +61,6 @@ class HomeScreen extends Component {
             itemToOpen: null,
         };
 
-        Navigation.events().bindComponent(this);
         AdMobInterstitial.setAdUnitID('ca-app-pub-0073961265435848/9332367917');
         AdMobInterstitial.addEventListener('adClosed', () => {
             if (this.state.itemToOpen) {
@@ -72,17 +72,34 @@ class HomeScreen extends Component {
         });
     }
 
+    componentWillMount() {
+        this.navigationEventListener = Navigation.events().bindComponent(this);
+    }
+
+    componentWillUnmount() {
+        // Not mandatory
+        if (this.navigationEventListener) {
+            this.navigationEventListener.remove();
+        }
+    }
+
+    async navigationButtonPressed({ buttonId }) {
+        StoreService.dispatch(action.changeScreen(null, true), 'HomeScreen.handleListItemPress');
+    }
+
     static getTrigger(functionName) {
         return `App/Src/Screens/Home/Component/HomeScreen.${functionName}`;
     }
 
     handleListItemPress = (item) => {
         if (!isEmpty(item.categories)) {
+            /*
             if (this.showBanner()) {
                 AdMobInterstitial.requestAd().then(() => {
                     AdMobInterstitial.showAd();
                 });
             }
+            */
             StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
             Navigation.push(HomeInfo.id, {
                 component: {
@@ -103,14 +120,14 @@ class HomeScreen extends Component {
         } else {
             StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
             if (this.checkShowBanner()) {
-              this.showBanner();
+              // this.showBanner();
             } else {
               openMap({query: item.category + ' near me'});
             }
         }
     };
 
-    checkShowBanner = () => this.props.state.changedScreens === 2
+    checkShowBanner = () => this.props.changedScreens === 2
         || (this.props.state.changedScreens % NUM_SCREENS_BETWEEN_ADS === 0 && this.props.state.changedScreens > NUM_SCREENS_BETWEEN_ADS);
 
     showBanner = () => {
@@ -120,20 +137,6 @@ class HomeScreen extends Component {
                 itemToOpen: item,
             })
         });
-    };
-
-    renderBanner = () => {
-        if (this.state.adBannedError) {
-            return null;
-        }
-        return (
-            <AdMobBanner
-                adSize="fullBanner"
-                adUnitID={'ca-app-pub-0073961265435848/6394818233'}
-                testDevices={[AdMobBanner.simulatorId]}
-                onAdFailedToLoad={error => this.setState({ adBannerError: error })}
-            />
-        );
     };
 
     render() {
@@ -152,8 +155,9 @@ class HomeScreen extends Component {
 }
 
 export default compose(
-  connect(state => ({
-    actualScreen: get(state, 'screen.actualScreen', screenState.actualScreen),
-  })),
+    connect(state => ({
+        actualScreen: get(state, 'screen.actualScreen', screenState.actualScreen),
+        changedScreens: get(state, 'screen.changedScreens', screenState.changedScreens),
+    })),
   // withTranslations,
 )(HomeScreen);

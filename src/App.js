@@ -82,7 +82,7 @@ function start() {
                                                         },
                                                         leftButtons: [
                                                             {
-                                                                id: 'sideMenu',
+                                                                id: 'backButton',
                                                                 icon: imgs[2],
                                                                 disableIconTint: true
                                                             },

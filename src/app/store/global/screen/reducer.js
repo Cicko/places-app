@@ -15,6 +15,7 @@ function screen(state = initialState, action = { type: 'none' }) {
                 ...state,
                 actualScreen: action.payload.screen,
                 changedScreens: state.changedScreens + 1,
+                isHomeScreen: action.payload.isHomeScreen,
             };
         case RESET_CHANGE_SCREEN_COUNT:
             return {

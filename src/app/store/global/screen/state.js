@@ -8,5 +8,7 @@
 
 export default {
     changedScreens: 1,
-    actualScreen: {},
+    actualScreen: {
+        isHomeScreen: true,
+    },
 }
