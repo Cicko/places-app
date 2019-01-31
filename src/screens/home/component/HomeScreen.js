@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
 });
 
+const NUM_SCREENS_BETWEEN_ADS = 3;
 
 class HomeScreen extends Component {
 
@@ -110,7 +111,7 @@ class HomeScreen extends Component {
         }
     };
 
-    checkShowBanner = () => this.props.state.changedScreens === 2
+    checkShowBanner = () => this.props.changedScreens === 2
         || (this.props.state.changedScreens % NUM_SCREENS_BETWEEN_ADS === 0 && this.props.state.changedScreens > NUM_SCREENS_BETWEEN_ADS);
 
     showBanner = () => {
@@ -120,20 +121,6 @@ class HomeScreen extends Component {
                 itemToOpen: item,
             })
         });
-    };
-
-    renderBanner = () => {
-        if (this.state.adBannedError) {
-            return null;
-        }
-        return (
-            <AdMobBanner
-                adSize="fullBanner"
-                adUnitID={'ca-app-pub-0073961265435848/6394818233'}
-                testDevices={[AdMobBanner.simulatorId]}
-                onAdFailedToLoad={error => this.setState({ adBannerError: error })}
-            />
-        );
     };
 
     render() {
@@ -152,8 +139,9 @@ class HomeScreen extends Component {
 }
 
 export default compose(
-  connect(state => ({
-    actualScreen: get(state, 'screen.actualScreen', screenState.actualScreen),
-  })),
+    connect(state => ({
+        actualScreen: get(state, 'screen.actualScreen', screenState.actualScreen),
+        changedScreens: get(state, 'screen.changedScreens', screenState.changedScreens),
+    })),
   // withTranslations,
 )(HomeScreen);
