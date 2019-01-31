@@ -11,6 +11,10 @@ import PropTypes from 'prop-types';
 import { StyleSheet, ScrollView } from 'react-native';
 import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
+import {
+  AdMobBanner,
+  AdMobInterstitial,
+} from 'react-native-admob';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { StoreService } from '../../../lib/services';

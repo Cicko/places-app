@@ -51,25 +51,49 @@ function start() {
         Promise.all([
             getIconImage('list'),
             getIconImage('star'),
+            getIconImage('arrow-back'),
         ]).then((imgs) => {
             Navigation.setRoot({
                 root: {
                     bottomTabs: {
                         children: [
                             {
-                                component: {
-                                    id: 'Home',
-                                    name: 'EasyMove.Screens.Home',
-                                    text: 'Home',
-                                    passProps: {
-                                        text: 'Props passed through navigator',
-                                        myFunction: () => 'Hello from a function!',
-                                    },
-                                    options: {
-                                        bottomTab: {
-                                            icon: imgs[0],
-                                        },
-                                    },
+                                stack: {
+                                    children: [
+                                        {
+                                            component: {
+                                                id: 'Home',
+                                                name: 'EasyMove.Screens.Home',
+                                                text: 'Home',
+                                                passProps: {
+                                                    text: 'Props passed through navigator',
+                                                    myFunction: () => 'Hello from a function!',
+                                                },
+                                                options: {
+                                                    bottomTab: {
+                                                        icon: imgs[0],
+                                                    },
+                                                    topBar: {
+                                                        title: {
+                                                            text: 'Places',
+                                                        },
+                                                        backButton: {
+                                                            visible: true,
+                                                        },
+                                                        leftButtons: [
+                                                            {
+                                                                id: 'sideMenu',
+                                                                icon: imgs[2],
+                                                                disableIconTint: true
+                                                            },
+                                                        ],
+                                                        icon: imgs[0],
+                                                    },
+                                                },
+                                            },
+                                        }
+
+                                    ],
                                 },
                             },
                             {
