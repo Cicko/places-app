@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, ScrollView } from 'react-native';
 import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
+import openMap from 'react-native-open-maps';
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -44,6 +45,7 @@ class HomeScreen extends Component {
         items: [],
         color: colors.backgroundDefault,
         actualScreen: null,
+
     };
 
     /**
@@ -52,50 +54,87 @@ class HomeScreen extends Component {
      */
     constructor(props) {
         super(props);
+
+        this.state = {
+            adBannedError: null,
+            itemToOpen: null,
+        };
+
         Navigation.events().bindComponent(this);
+        AdMobInterstitial.setAdUnitID('ca-app-pub-0073961265435848/9332367917');
+        AdMobInterstitial.addEventListener('adClosed', () => {
+            if (this.state.itemToOpen) {
+                openMap({query: this.state.itemToOpen.category + ' near me'});
+                this.setState({
+                    itemToOpen: null,
+                })
+            }
+        });
     }
 
     static getTrigger(functionName) {
         return `App/Src/Screens/Home/Component/HomeScreen.${functionName}`;
     }
 
-  handleListItemPress = (item) => {
-    if (!isEmpty(item.categories)) {
-        /*
-      if (this.showBanner()) {
-        AdMobInterstitial.requestAd().then(() => {
-          AdMobInterstitial.showAd();
-        });
-      }
-      */
-      StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
-      Navigation.push(HomeInfo.id, {
-        component: {
-          name: HomeInfo.id,
-          passProps: {
-            items: item.categories,
-            color: item.color,
-          },
-          options: {
-            topBar: {
-              title: {
-                text: item.name,
-              }
+    handleListItemPress = (item) => {
+        if (!isEmpty(item.categories)) {
+            if (this.showBanner()) {
+                AdMobInterstitial.requestAd().then(() => {
+                    AdMobInterstitial.showAd();
+                });
             }
-          }
-        },
-      });
-    } else {
-      StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
-      /*
-      if (this.checkShowBanner()) {
-        this.showBanner();
-      } else {
-        openMap({query: item.category + ' near me'});
-      }
-      */
-    }
-  };
+            StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
+            Navigation.push(HomeInfo.id, {
+                component: {
+                    name: HomeInfo.id,
+                    passProps: {
+                        items: item.categories,
+                        color: item.color,
+                    },
+                    options: {
+                        topBar: {
+                            title: {
+                                text: item.name,
+                            }
+                        }
+                    }
+                },
+            });
+        } else {
+            StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
+            if (this.checkShowBanner()) {
+              this.showBanner();
+            } else {
+              openMap({query: item.category + ' near me'});
+            }
+        }
+    };
+
+    checkShowBanner = () => this.props.state.changedScreens === 2
+        || (this.props.state.changedScreens % NUM_SCREENS_BETWEEN_ADS === 0 && this.props.state.changedScreens > NUM_SCREENS_BETWEEN_ADS);
+
+    showBanner = () => {
+        AdMobInterstitial.requestAd().then(() => {
+            AdMobInterstitial.showAd();
+            this.setState({
+                itemToOpen: item,
+            })
+        });
+    };
+
+    renderBanner = () => {
+        if (this.state.adBannedError) {
+            return null;
+        }
+        return (
+            <AdMobBanner
+                adSize="fullBanner"
+                adUnitID={'ca-app-pub-0073961265435848/6394818233'}
+                testDevices={[AdMobBanner.simulatorId]}
+                onAdFailedToLoad={error => this.setState({ adBannerError: error })}
+            />
+        );
+    };
 
     render() {
         console.log(this.props.actualScreen);
