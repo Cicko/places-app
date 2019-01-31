@@ -1,4 +1,4 @@
-package com.easymove;
+package com.myplacesapp;
 
 import com.reactnativenavigation.NavigationActivity;
 
