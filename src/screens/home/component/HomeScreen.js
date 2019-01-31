@@ -83,8 +83,8 @@ class HomeScreen extends Component {
         }
     }
 
-    navigationButtonPressed({ buttonId }) {
-        console.log(buttonId);
+    async navigationButtonPressed({ buttonId }) {
+        StoreService.dispatch(action.changeScreen(null, true), 'HomeScreen.handleListItemPress');
     }
 
     static getTrigger(functionName) {
@@ -93,11 +93,13 @@ class HomeScreen extends Component {
 
     handleListItemPress = (item) => {
         if (!isEmpty(item.categories)) {
+            /*
             if (this.showBanner()) {
                 AdMobInterstitial.requestAd().then(() => {
                     AdMobInterstitial.showAd();
                 });
             }
+            */
             StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
             Navigation.push(HomeInfo.id, {
                 component: {
@@ -118,7 +120,7 @@ class HomeScreen extends Component {
         } else {
             StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
             if (this.checkShowBanner()) {
-              this.showBanner();
+              // this.showBanner();
             } else {
               openMap({query: item.category + ' near me'});
             }
