@@ -12,9 +12,11 @@ import { StyleSheet, ScrollView } from 'react-native';
 import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import openMap from 'react-native-open-maps';
+/*
 import {
   AdMobInterstitial,
 } from 'react-native-admob';
+*/
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { StoreService } from '../../../lib/services';
@@ -61,15 +63,17 @@ class HomeScreen extends Component {
             itemToOpen: null,
         };
 
-        AdMobInterstitial.setAdUnitID('ca-app-pub-0073961265435848/9332367917');
-        AdMobInterstitial.addEventListener('adClosed', () => {
-            if (this.state.itemToOpen) {
-                openMap({query: this.state.itemToOpen.category + ' near me'});
-                this.setState({
-                    itemToOpen: null,
-                })
-            }
-        });
+        if (!ADS_DISABLED) {
+            AdMobInterstitial.setAdUnitID('ca-app-pub-0073961265435848/9332367917');
+            AdMobInterstitial.addEventListener('adClosed', () => {
+                if (this.state.itemToOpen) {
+                    openMap({query: this.state.itemToOpen.category + ' near me'});
+                    this.setState({
+                        itemToOpen: null,
+                    })
+                }
+            });
+        }
     }
 
     componentWillMount() {
