@@ -12,6 +12,7 @@ import { Platform } from 'react-native';
 import getRegistrationId from './lib/util/navigation/getRegistrationId';
 import getIconImage from './lib/util/icon/getIconImage';
 import { StoreService } from './lib/services';
+import colors from './app/theme/colors';
 
 if (Platform.OS === 'android') {
     alert = (title) => {
@@ -63,7 +64,7 @@ function start() {
                                         {
                                             component: {
                                                 id: 'Home',
-                                                name: 'EasyMove.Screens.Home',
+                                                name: getRegistrationId('Screens', 'Home'),
                                                 text: 'Home',
                                                 passProps: {
                                                     text: 'Props passed through navigator',
@@ -72,6 +73,7 @@ function start() {
                                                 options: {
                                                     bottomTab: {
                                                         icon: imgs[0],
+                                                        iconColor: colors.primary.main,
                                                     },
                                                     topBar: {
                                                         title: {
@@ -84,7 +86,7 @@ function start() {
                                                             {
                                                                 id: 'backButton',
                                                                 icon: imgs[2],
-                                                                disableIconTint: true
+                                                                color: colors.primary.main,
                                                             },
                                                         ],
                                                         icon: imgs[0],
@@ -106,6 +108,7 @@ function start() {
                                     options: {
                                         bottomTab: {
                                             icon: imgs[1],
+                                            iconColor: colors.primary.main,
                                         }
                                     }
                                 },

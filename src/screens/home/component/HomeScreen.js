@@ -13,7 +13,6 @@ import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import openMap from 'react-native-open-maps';
 import {
-  AdMobBanner,
   AdMobInterstitial,
 } from 'react-native-admob';
 import { connect } from 'react-redux';
@@ -33,6 +32,7 @@ const styles = StyleSheet.create({
 });
 
 const NUM_SCREENS_BETWEEN_ADS = 4;
+const ADS_DISABLED = true;
 
 class HomeScreen extends Component {
 
@@ -93,13 +93,11 @@ class HomeScreen extends Component {
 
     handleListItemPress = (item) => {
         if (!isEmpty(item.categories)) {
-            /*
-            if (this.showBanner()) {
+            if (this.checkShowBanner() && !ADS_DISABLED) {
                 AdMobInterstitial.requestAd().then(() => {
                     AdMobInterstitial.showAd();
                 });
             }
-            */
             StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
             Navigation.push(HomeInfo.id, {
                 component: {
@@ -118,9 +116,9 @@ class HomeScreen extends Component {
                 },
             });
         } else {
-            StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
-            if (this.checkShowBanner()) {
-              // this.showBanner();
+            // StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
+            if (this.checkShowBanner() && !ADS_DISABLED) {
+              this.showBanner();
             } else {
               openMap({query: item.category + ' near me'});
             }
@@ -128,7 +126,7 @@ class HomeScreen extends Component {
     };
 
     checkShowBanner = () => this.props.changedScreens === 2
-        || (this.props.state.changedScreens % NUM_SCREENS_BETWEEN_ADS === 0 && this.props.state.changedScreens > NUM_SCREENS_BETWEEN_ADS);
+        || (this.props.changedScreens % NUM_SCREENS_BETWEEN_ADS === 0 && this.props.changedScreens > NUM_SCREENS_BETWEEN_ADS);
 
     showBanner = () => {
         AdMobInterstitial.requestAd().then(() => {
