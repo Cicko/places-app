@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug",
-    "bundle-android": "react-native bundle --assets-dest ./android/app/src/main/res/ --entry-file ./index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --platform android --dev false",
+    "move-mdpi": "mkdir -p ./android/app/src/main/res/drawable-hdpi && mv ./android/app/src/main/res/drawable-mdpi/* ./android/app/src/main/res/drawable-hdpi",
+    "bundle-android": "react-native bundle --assets-dest ./android/app/src/main/res/ --entry-file ./index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --platform android --dev false && npm run move-mdpi",
     "ios": "react-native run-ios",
     "test": "jest"
   },
