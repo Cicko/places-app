@@ -17,14 +17,13 @@ import {
 } from 'react-native-admob';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { StoreService } from '../../../lib/services';
+import { StoreService, NavigationService } from '../../../lib/services';
 import List from '../../../app/components/List';
 import action from'../../../app/store/global/screen/action'
 import screenState from'../../../app/store/global/screen/state';
 import colors from '../../../app/theme/colors';
 import items from '../../categories';
 import HomeInfo from '../';
-import { getIconImage } from '../../../lib/util';
 
 const styles = StyleSheet.create({
   container: {
@@ -86,6 +85,11 @@ class HomeScreen extends Component {
         }
     }
 
+    shouldComponentUpdate(newProps) {
+        NavigationService.showBackButtonIf(newProps.actualScreen === null, HomeInfo.id);
+        return true;
+    }
+
     async navigationButtonPressed({ buttonId }) {
         if (buttonId === 'backButton') {
             StoreService.dispatch(action.changeScreen(null, true), 'HomeScreen.handleListItemPress');
@@ -103,18 +107,6 @@ class HomeScreen extends Component {
                     AdMobInterstitial.showAd();
                 });
             }
-            getIconImage('arrow-back').then((img) => {
-                Navigation.mergeOptions(HomeInfo.id, {
-                    topBar: {
-                        leftButtons: {
-                            id: 'backButton',
-                            icon: img,
-                            text: 'caca',
-                            color: colors.primary.main,
-                        },
-                    },
-                });
-            });
             StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
         } else {
             // StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
