@@ -63,7 +63,7 @@ function start() {
                                     children: [
                                         {
                                             component: {
-                                                id: 'Home',
+                                                id: getRegistrationId('Screens', 'Home'),
                                                 name: getRegistrationId('Screens', 'Home'),
                                                 text: 'Home',
                                                 passProps: {
@@ -79,17 +79,6 @@ function start() {
                                                         title: {
                                                             text: 'Places',
                                                         },
-                                                        backButton: {
-                                                            visible: true,
-                                                        },
-                                                        leftButtons: [
-                                                            {
-                                                                id: 'backButton',
-                                                                icon: imgs[2],
-                                                                color: colors.primary.main,
-                                                            },
-                                                        ],
-                                                        icon: imgs[0],
                                                     },
                                                 },
                                             },

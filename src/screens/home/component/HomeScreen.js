@@ -12,11 +12,9 @@ import { StyleSheet, ScrollView } from 'react-native';
 import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import openMap from 'react-native-open-maps';
-/*
 import {
   AdMobInterstitial,
 } from 'react-native-admob';
-*/
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { StoreService } from '../../../lib/services';
@@ -26,6 +24,7 @@ import screenState from'../../../app/store/global/screen/state';
 import colors from '../../../app/theme/colors';
 import items from '../../categories';
 import HomeInfo from '../';
+import { getIconImage } from '../../../lib/util';
 
 const styles = StyleSheet.create({
   container: {
@@ -88,7 +87,9 @@ class HomeScreen extends Component {
     }
 
     async navigationButtonPressed({ buttonId }) {
-        StoreService.dispatch(action.changeScreen(null, true), 'HomeScreen.handleListItemPress');
+        if (buttonId === 'backButton') {
+            StoreService.dispatch(action.changeScreen(null, true), 'HomeScreen.handleListItemPress');
+        }
     }
 
     static getTrigger(functionName) {
@@ -102,23 +103,19 @@ class HomeScreen extends Component {
                     AdMobInterstitial.showAd();
                 });
             }
-            StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
-            Navigation.push(HomeInfo.id, {
-                component: {
-                    name: HomeInfo.id,
-                    passProps: {
-                        items: item.categories,
-                        color: item.color,
+            getIconImage('arrow-back').then((img) => {
+                Navigation.mergeOptions(HomeInfo.id, {
+                    topBar: {
+                        leftButtons: {
+                            id: 'backButton',
+                            icon: img,
+                            text: 'caca',
+                            color: colors.primary.main,
+                        },
                     },
-                    options: {
-                        topBar: {
-                            title: {
-                                text: item.name,
-                            }
-                        }
-                    }
-                },
+                });
             });
+            StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
         } else {
             // StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
             if (this.checkShowBanner() && !ADS_DISABLED) {
@@ -142,14 +139,12 @@ class HomeScreen extends Component {
     };
 
     render() {
-        console.log(this.props.actualScreen);
         return (
           <ScrollView style={styles.container} bounces={false}>
             <List
               items={get(this.props, 'actualScreen.categories', items)}
               onPress={this.handleListItemPress}
               color={this.props.color}
-              onAddNew={noop}
             />
           </ScrollView>
         );

@@ -17,7 +17,7 @@ import { LIST_ITEM_HEIGHT } from './constants';
 
 const styles = StyleSheet.create({
     container: {
-
+        marginBottom: 5,
     },
     listItemContainer: {
         height: LIST_ITEM_HEIGHT,
@@ -56,7 +56,7 @@ class List extends Component {
 
     static defaultProps = {
         color: colors.backgroundDefault,
-        onAddNew: noop,
+        onAddNew: null,
     };
 
     /**
@@ -75,11 +75,11 @@ class List extends Component {
                         item={item}/>
                 </View>
             ))}
-            <View style={styles.buttonContainer}>
+            {this.props.onAddNew && <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={this.props.onAddNew}>
                     <Icon style={styles.addIcon} name={"md-add"}/>
                 </TouchableOpacity>
-            </View>
+            </View>}
           </View>
         );
     }
