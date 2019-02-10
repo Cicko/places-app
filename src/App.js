@@ -74,6 +74,7 @@ function start() {
                                                     bottomTab: {
                                                         icon: imgs[0],
                                                         iconColor: colors.primary.main,
+                                                        animate: false,
                                                     },
                                                     topBar: {
                                                         title: {
