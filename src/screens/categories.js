@@ -108,6 +108,11 @@ let categories = [
                 category: 'mountains',
                 image: require('../assets/img/categories/mountains.jpg'),
             },
+            {
+                name: 'Beaches',
+                category: 'beaches',
+                image: require('../assets/img/categories/beaches.jpeg'),
+            }
         ],
     },
     {
@@ -115,6 +120,44 @@ let categories = [
         category: 'shops',
         image: require('../assets/img/categories/shops.jpg'),
     },
+    {
+        name: 'Public services',
+        category: 'public+services',
+        image: require('../assets/img/categories/library.jpeg'),
+        categories: [
+            {
+                name: 'Parkings',
+                category: 'parkings',
+                image: require('../assets/img/categories/parking.jpeg'),
+            },
+            {
+                name: 'Libraries',
+                category: 'libraries',
+                image: require('../assets/img/categories/library.jpeg'),
+            },
+            {
+                name: 'Hospitals',
+                category: 'hospital',
+                image: require('../assets/img/categories/hospital.jpeg'),
+            },
+            {
+                name: 'Universities',
+                category: 'universities',
+                image: require('../assets/img/categories/university.jpeg'),
+            },
+            {
+                name: 'Post offices',
+                category: 'post+office',
+                image: require('../assets/img/categories/post+office.jpeg'),
+            },
+            {
+                name: 'Hairdressers',
+                category: 'hairdresser',
+                image: require('../assets/img/categories/hairdresser.jpeg'),
+            },
+        ]
+
+    }
 ];
 
 export default categories;
