@@ -103,6 +103,11 @@ let categories = [
                 category: 'lakes',
                 image: require('../assets/img/categories/lake.jpg'),
             },
+            {
+                name: 'Mountains',
+                category: 'mountains',
+                image: require('../assets/img/categories/mountains.jpg'),
+            },
         ],
     },
     {

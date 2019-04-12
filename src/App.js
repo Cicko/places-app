@@ -52,7 +52,6 @@ function start() {
         Promise.all([
             getIconImage('list'),
             getIconImage('star'),
-            getIconImage('arrow-back'),
         ]).then((imgs) => {
             Navigation.setRoot({
                 root: {
