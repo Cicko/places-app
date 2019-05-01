@@ -21,7 +21,12 @@ let categories = [
                 name: 'Jazz bars',
                 category: 'jazz+bar',
                 image: require('../assets/img/categories/jazz+bar.jpg'),
-            }
+            },
+            {
+                name: 'Karaoke',
+                category: 'karaoke',
+                image: require('../assets/img/categories/karaoke.jpg'),
+            },
         ]
     },
     {
