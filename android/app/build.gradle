@@ -145,15 +145,14 @@ android {
             }
         }
     }
+
     subprojects { subproject ->
         afterEvaluate {
             if ((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
                 android {
                     variantFilter { variant ->
                         def names = variant.flavors*.name
-                        // To check for a certain build type, use variant.buildType.name == "<buildType>"
-                        if (names.contains("reactNative51") || names.contains("reactNative55")) {
-                            // Gradle ignores any variants that satisfy the conditions above.
+                        if (names.contains("reactNative51") || names.contains("reactNative55") || names.contains("reactNative56") || names.contains("reactNative57WixFork")) {
                             setIgnore(true)
                         }
                     }
@@ -161,6 +160,7 @@ android {
             }
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -168,6 +168,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-navigation-bar-color')
     compile project(':react-native-admob')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-vector-icons')
