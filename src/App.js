@@ -6,7 +6,7 @@
  * @flow
  */
 import { Navigation } from 'react-native-navigation';
-import { defaultOptions, rootOptions } from './config/navigation';
+import { defaultOptions } from './config/navigation';
 import { registerScreens } from './screens';
 import { Platform } from 'react-native';
 import getRegistrationId from './lib/util/navigation/getRegistrationId';

@@ -8,7 +8,13 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, ScrollView, BackHandler, View} from 'react-native';
+import {
+    StyleSheet,
+    ScrollView,
+    BackHandler,
+    View,
+    Platform,
+} from 'react-native';
 import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import openMap from 'react-native-open-maps';
@@ -38,6 +44,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.navDrawerBackground,
         justifyContent: 'center',
         flexDirection: 'row',
+        height: 50,
     },
 });
 
@@ -67,7 +74,9 @@ class HomeScreen extends Component {
         super(props);
 
         changeNavigationBarColor(colors.navDrawerBackground);
-        HideNavigationBar();
+        if (Platform.OS === 'ios') {
+            HideNavigationBar();
+        }
         this.state = {
             adBannedError: null,
             itemToOpen: null,
@@ -152,23 +161,20 @@ class HomeScreen extends Component {
     renderBanner = () =>
         <View style={styles.adBannerContainer}>
             <AdMobBanner
-                adSize="fullBanner"
+                adSize="banner"
                 adUnitID="ca-app-pub-0073961265435848/7977965787"
             />
         </View>;
 
     render() {
-        return [
-          <ScrollView style={styles.container} bounces={false}>
-            <List
-              items={get(this.props, 'actualScreen.categories', items)}
-              onPress={this.handleListItemPress}
-              color={this.props.color}
-              banner={this.renderBanner()}
-            />
-          </ScrollView>,
-          this.renderBanner(),
-        ];
+        return <ScrollView style={styles.container} bounces={false}>
+                <List
+                    items={get(this.props, 'actualScreen.categories', items)}
+                    onPress={this.handleListItemPress}
+                    color={this.props.color}
+                    banner={this.renderBanner()}
+                />
+            </ScrollView>;
     }
 }
 
