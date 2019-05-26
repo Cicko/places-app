@@ -139,7 +139,7 @@ class HomeScreen extends Component {
         } else {
             // StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
             if (this.checkShowBanner() && !ADS_DISABLED) {
-              this.showBanner();
+              this.showBanner(item);
             } else {
               openMap({query: item.category + ' near me'});
             }
@@ -149,7 +149,7 @@ class HomeScreen extends Component {
     checkShowBanner = () => this.props.changedScreens === 2
         || (this.props.changedScreens % NUM_SCREENS_BETWEEN_ADS === 0 && this.props.changedScreens > NUM_SCREENS_BETWEEN_ADS);
 
-    showBanner = () => {
+    showBanner = (item) => {
         AdMobInterstitial.requestAd().then(() => {
             AdMobInterstitial.showAd();
             this.setState({
