@@ -8,7 +8,7 @@
 
 export default {
     layout: {
-        componentBackgroundColor: '#e8e8e8',
+        componentBackgroundColor: '#FFDC67',
         orientation: ['portrait']
     },
     bottomTab: {

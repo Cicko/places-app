@@ -18,6 +18,11 @@ let categories = [
                 image: require('../assets/img/categories/night+clubs.jpg'),
             },
             {
+                name: 'Bars',
+                category: 'bar',
+                image: require('../assets/img/categories/bar.jpg'),
+            },
+            {
                 name: 'Jazz bars',
                 category: 'jazz+bar',
                 image: require('../assets/img/categories/jazz+bar.jpg'),
@@ -35,7 +40,7 @@ let categories = [
         image: require('../assets/img/categories/nutrition.jpg'),
         categories: [
             {
-                name: 'coffee',
+                name: 'Coffees',
                 category: 'coffee',
                 image: require('../assets/img/categories/coffee.jpg'),
             },
@@ -48,6 +53,11 @@ let categories = [
                 name: 'Vegan restaurants',
                 category: 'vegan+restaurants',
                 image: require('../assets/img/categories/vegan+restaurants.jpg'),
+            },
+            {
+                name: 'Turkish restaurants',
+                category: 'turkish+restaurants',
+                image: require('../assets/img/categories/turkish+restaurants.jpg'),
             },
             {
                 name: 'Asian restaurants',

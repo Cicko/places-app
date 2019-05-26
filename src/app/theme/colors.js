@@ -7,7 +7,7 @@
  */
 export default {
   primary: {
-    main: '#424242',
+    main: '#FFDC67',
     darker: '#e32929',
     lighter: '#87889c',
     alternative: '#87889c',
@@ -29,7 +29,7 @@ export default {
   },
   white: '#ffffff',
   black: '#000000',
-  backgroundDefault: '#BDBDBD',
-  navDrawerBackground: '#424242',
-  navDrawerTextColor: '#FFFFFF',
+  backgroundDefault: '#F7C59F',
+  navDrawerBackground: '#FF6B35',
+  navDrawerTextColor: '#F7C59F',
 };

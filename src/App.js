@@ -55,53 +55,36 @@ function start() {
         ]).then((imgs) => {
             Navigation.setRoot({
                 root: {
-                    bottomTabs: {
+                    stack: {
                         children: [
                             {
-                                stack: {
-                                    children: [
-                                        {
-                                            component: {
-                                                id: getRegistrationId('Screens', 'Home'),
-                                                name: getRegistrationId('Screens', 'Home'),
-                                                text: 'Home',
-                                                passProps: {
-                                                    text: 'Props passed through navigator',
-                                                    myFunction: () => 'Hello from a function!',
-                                                },
-                                                options: {
-                                                    bottomTab: {
-                                                        icon: imgs[0],
-                                                        iconColor: colors.primary.main,
-                                                        animate: false,
-                                                    },
-                                                    topBar: {
-                                                        title: {
-                                                            text: 'Places',
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        }
-
-                                    ],
-                                },
-                            },
-                            {
                                 component: {
-                                    name: 'EasyMove.Screens.Favourites',
-                                    id: 'Favourites',
+                                    id: getRegistrationId('Screens', 'Home'),
+                                    name: getRegistrationId('Screens', 'Home'),
+                                    text: 'Home',
                                     passProps: {
-                                        text: 'This is tab 2',
+                                        text: 'Props passed through navigator',
+                                        myFunction: () => 'Hello from a function!',
                                     },
                                     options: {
                                         bottomTab: {
-                                            icon: imgs[1],
+                                            icon: imgs[0],
                                             iconColor: colors.primary.main,
-                                        }
-                                    }
+                                            animate: false,
+                                        },
+                                        topBar: {
+                                            title: {
+                                                text: 'Places',
+                                                color: colors.navDrawerTextColor,
+                                            },
+                                            background: {
+                                                color: colors.navDrawerBackground,
+                                            },
+                                        },
+                                    },
                                 },
-                            },
+                            }
+
                         ],
                     },
                 }

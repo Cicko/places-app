@@ -8,13 +8,17 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ScrollView } from 'react-native';
+import {StyleSheet, ScrollView, BackHandler, View} from 'react-native';
 import { noop, isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import openMap from 'react-native-open-maps';
 import {
-  AdMobInterstitial,
+    AdMobInterstitial,
+    AdMobBanner,
 } from 'react-native-admob';
+import changeNavigationBarColor, {
+    HideNavigationBar,
+} from 'react-native-navigation-bar-color';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { StoreService, NavigationService } from '../../../lib/services';
@@ -25,14 +29,20 @@ import colors from '../../../app/theme/colors';
 import items from '../../categories';
 import HomeInfo from '../';
 
+
 const styles = StyleSheet.create({
-  container: {
+    container: {
     backgroundColor: colors.backgroundDefault,
-  },
+    },
+    adBannerContainer: {
+        backgroundColor: colors.navDrawerBackground,
+        justifyContent: 'center',
+        flexDirection: 'row',
+    },
 });
 
-const NUM_SCREENS_BETWEEN_ADS = 4;
-const ADS_DISABLED = true;
+const NUM_SCREENS_BETWEEN_ADS = 2;
+const ADS_DISABLED = false;
 
 class HomeScreen extends Component {
 
@@ -56,6 +66,8 @@ class HomeScreen extends Component {
     constructor(props) {
         super(props);
 
+        changeNavigationBarColor(colors.navDrawerBackground);
+        HideNavigationBar();
         this.state = {
             adBannedError: null,
             itemToOpen: null,
@@ -76,6 +88,7 @@ class HomeScreen extends Component {
 
     componentWillMount() {
         this.navigationEventListener = Navigation.events().bindComponent(this);
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     }
 
     componentWillUnmount() {
@@ -83,6 +96,7 @@ class HomeScreen extends Component {
         if (this.navigationEventListener) {
             this.navigationEventListener.remove();
         }
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
     }
 
     shouldComponentUpdate(newProps) {
@@ -92,9 +106,14 @@ class HomeScreen extends Component {
 
     async navigationButtonPressed({ buttonId }) {
         if (buttonId === 'backButton') {
-            StoreService.dispatch(action.changeScreen(null, true), 'HomeScreen.handleListItemPress');
+            this.handleBackPress();
         }
     }
+
+    handleBackPress = () => {
+        StoreService.dispatch(action.changeScreen(null, true), 'HomeScreen.handleListItemPress');
+        return true;
+    };
 
     static getTrigger(functionName) {
         return `App/Src/Screens/Home/Component/HomeScreen.${functionName}`;
@@ -130,16 +149,26 @@ class HomeScreen extends Component {
         });
     };
 
+    renderBanner = () =>
+        <View style={styles.adBannerContainer}>
+            <AdMobBanner
+                adSize="fullBanner"
+                adUnitID="ca-app-pub-0073961265435848/7977965787"
+            />
+        </View>;
+
     render() {
-        return (
+        return [
           <ScrollView style={styles.container} bounces={false}>
             <List
               items={get(this.props, 'actualScreen.categories', items)}
               onPress={this.handleListItemPress}
               color={this.props.color}
+              banner={this.renderBanner()}
             />
-          </ScrollView>
-        );
+          </ScrollView>,
+          this.renderBanner(),
+        ];
     }
 }
 
