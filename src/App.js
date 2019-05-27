@@ -75,7 +75,7 @@ function start() {
                                         topBar: {
                                             title: {
                                                 text: 'Places',
-                                                color: colors.navDrawerTextColor,
+                                                color: colors.secondary.main,
                                             },
                                             background: {
                                                 color: colors.navDrawerBackground,

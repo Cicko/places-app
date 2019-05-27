@@ -74,7 +74,7 @@ class HomeScreen extends Component {
     constructor(props) {
         super(props);
 
-        changeNavigationBarColor(colors.navDrawerBackground);
+        changeNavigationBarColor(colors.navDrawerBackground, true);
         if (Platform.OS === 'ios') {
             HideNavigationBar();
         }
