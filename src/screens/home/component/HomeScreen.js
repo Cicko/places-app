@@ -15,7 +15,7 @@ import {
     View,
     Platform,
 } from 'react-native';
-import { noop, isEmpty, get } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { Navigation } from 'react-native-navigation';
 import openMap from 'react-native-open-maps';
 import {
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
 
 const NUM_SCREENS_BETWEEN_ADS = 2;
 const ADS_DISABLED = false;
+const AD_REQUEST_TIME_LIMIT = 2000;
 
 class HomeScreen extends Component {
 
@@ -149,13 +150,25 @@ class HomeScreen extends Component {
     checkShowBanner = () => this.props.changedScreens === 2
         || (this.props.changedScreens % NUM_SCREENS_BETWEEN_ADS === 0 && this.props.changedScreens > NUM_SCREENS_BETWEEN_ADS);
 
-    showBanner = (item) => {
+    showBanner = (item, cb) => {
+        let adRequestingTooLong = true;
+        let timeout = false;
+
         AdMobInterstitial.requestAd().then(() => {
-            AdMobInterstitial.showAd();
-            this.setState({
-                itemToOpen: item,
-            })
+            adRequestingTooLong = false;
+            if (!timeout) {
+                AdMobInterstitial.showAd();
+                this.setState({
+                    itemToOpen: item,
+                });
+            }
         });
+        setTimeout(() => {
+            if (adRequestingTooLong) {
+                timeout = true;
+                openMap(item);
+            }
+        }, AD_REQUEST_TIME_LIMIT);
     };
 
     renderBanner = () =>
