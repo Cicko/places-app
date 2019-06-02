@@ -101,11 +101,11 @@ android {
         applicationId "com.rudolfcicko.myplacesapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
+        versionCode 3
         missingDimensionStrategy "RNN.reactNativeVersion", "reactNative57_5"
-        versionName "1.2.2"
+        versionName "1.2.3"
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
         }
         multiDexEnabled true
     }

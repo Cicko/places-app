@@ -82,10 +82,12 @@ class HomeScreen extends Component {
             adBannedError: null,
             itemToOpen: null,
         };
+        this.adLoaded = false;
 
         if (!ADS_DISABLED) {
             AdMobInterstitial.setAdUnitID('ca-app-pub-0073961265435848/9332367917');
             AdMobInterstitial.addEventListener('adClosed', () => {
+                this.loadAd();
                 if (this.state.itemToOpen) {
                     openMap({query: this.state.itemToOpen.category + ' near me'});
                     this.setState({
@@ -93,8 +95,17 @@ class HomeScreen extends Component {
                     })
                 }
             });
+            this.loadAd();
         }
     }
+
+    loadAd = () => {
+        this.adLoaded = false;
+        AdMobInterstitial.requestAd().then(() => {
+            console.log('Ad loaded');
+            this.adLoaded = true;
+        });
+    };
 
     componentWillMount() {
         this.navigationEventListener = Navigation.events().bindComponent(this);
@@ -131,10 +142,8 @@ class HomeScreen extends Component {
 
     handleListItemPress = (item) => {
         if (!isEmpty(item.categories)) {
-            if (this.checkShowBanner() && !ADS_DISABLED) {
-                AdMobInterstitial.requestAd().then(() => {
-                    AdMobInterstitial.showAd();
-                });
+            if (this.checkShowBanner() && !ADS_DISABLED && adLoaded) {
+                AdMobInterstitial.showAd();
             }
             StoreService.dispatch(action.changeScreen(item), 'HomeScreen.handleListItemPress');
         } else {
@@ -154,21 +163,28 @@ class HomeScreen extends Component {
         let adRequestingTooLong = true;
         let timeout = false;
 
-        AdMobInterstitial.requestAd().then(() => {
-            adRequestingTooLong = false;
-            if (!timeout) {
-                AdMobInterstitial.showAd();
-                this.setState({
-                    itemToOpen: item,
-                });
-            }
-        });
-        setTimeout(() => {
-            if (adRequestingTooLong) {
-                timeout = true;
-                openMap(item);
-            }
-        }, AD_REQUEST_TIME_LIMIT);
+        if (this.adLoaded) {
+            AdMobInterstitial.showAd();
+            this.setState({
+                itemToOpen: item,
+            });
+        } else {
+            AdMobInterstitial.requestAd().then(() => {
+                adRequestingTooLong = false;
+                if (!timeout) {
+                    AdMobInterstitial.showAd();
+                    this.setState({
+                        itemToOpen: item,
+                    });
+                }
+            });
+            setTimeout(() => {
+                if (adRequestingTooLong) {
+                    timeout = true;
+                    openMap(item);
+                }
+            }, AD_REQUEST_TIME_LIMIT);
+        }
     };
 
     renderBanner = () =>
